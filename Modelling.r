@@ -9,16 +9,10 @@
 ##  * Lengte
 ##  * gewicht
 
-
-##  Beslisboom (r-part)
-##  Mixed effect model
-## 
-
-
 # Remove missing Height/Weight data and limit to years from 1960 onward
 data_v <- data %>% filter(!is.na(Height), !is.na(Weight), Year > 1959) 
 
-## ## ### ### ## #
+## ## ### ### ## 
 
 ggplot(data_mod)+
   geom_histogram(aes(count))
@@ -137,9 +131,9 @@ ggplot( data = season_medalist,
   geom_line() +
   Theme1 
 
-### ### ### ### ### ### ### ### ### ## ###
+### ## ### ### ## ### 
 ### Modelleringen ###
-### ### ### ### ## #### # ## # ###
+### ## ### ### ## ### 
 
 data_mod =
   Sport %>%
