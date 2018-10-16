@@ -9,6 +9,42 @@
 ##  * Lengte
 ##  * gewicht
 
+## libraries inladen
+libs <- c("ggplot2", "plotly", "tidyverse", "data.table", "gridExtra", "knitr", "stringi")
+install.packages(libs)
+lapply(libs, require, character.only = TRUE)
+
+## data inladen
+Data  <- read.csv("athlete_events.csv", 
+                  sep = ",", 
+                  header = T)
+Regions <- read.csv2("noc_regions.csv",  sep = ",", header = T)
+### ### ## ### ### ## ### ### 
+### ## Data preparatie ## ###
+### ### ## ### ### ## ### ###
+str(Data)
+## DATA STRUCTUREN
+## Data types veranderen
+Ch <- c("ID", "Name", "Team", "NOC", "Games", "City", "Sport", "Event")
+Int<- c("Age", "Year")
+Db <- c("Height", "Weight")
+Fac<- c("Sex", "Season", "Medal")
+
+cols_ch = c(grep(paste(Ch, collapse = "|"), names(Data), value=TRUE))
+cols_int = c(grep(paste(Int, collapse = "|"), names(Data), value=TRUE))
+cols_db = c(grep(paste(Db, collapse = "|"), names(Data), value=TRUE))
+
+Data[,cols_ch] = apply(Data[,cols_ch], 2, function(x) as.character(x))
+Data[,cols_int] = apply(Data[,cols_int], 2, function(x) as.numeric(as.character(x)))
+Data[,cols_db] = apply(Data[,cols_db], 2, function(x) as.double(as.character(x)))
+
+Data$Sex <- factor(Data$Sex, levels = c("M", "F"))
+Data$Season <- factor(Data$Season, levels = c("Summer", "Winter"))
+Data$Medal <- factor(Data$Medal, levels = c("Bronze", "Silver", "Gold"))
+
+# Exclude art competitions from data 
+data <- Data %>% filter(Sport != "Art Competitions")
+
 # Remove missing Height/Weight data and limit to years from 1960 onward
 data_v <- data %>% filter(!is.na(Height), !is.na(Weight), Year > 1959) 
 
